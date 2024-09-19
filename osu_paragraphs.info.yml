@@ -1,0 +1,7 @@
+name: 'OSU Paragraphs'
+type: module
+description: 'Provides Paragraph Bundles for OSU.'
+package: OSU
+core_version_requirement: ^10 || ^11
+dependencies:
+  - paragraphs:paragraphs
