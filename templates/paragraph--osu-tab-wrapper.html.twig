@@ -8,12 +8,12 @@
 ] %}
 <div{{ attributes.addClass(classes) }}>
   <h2>{{ content.field_osu_tab_wrapper_title }}</h2>
-  <div class="tab-wrapper-paragraph__items">
+  <div class="tab-wrapper-paragraph__tabs">
     {% for key, item in content.field_osu_paragraph_item %}
       {% if key|first != '#' %}
         {% set tabLinkId = 'tab-link-' ~ item['#paragraph'].id() %}
         {% set tabContentId = 'tab-content-' ~ item['#paragraph'].id() %}
-        <div class="tab-wrapper-paragraph__tabs">
+        <div class="tab-wrapper-paragraph__tab">
           <a id="{{ tabLinkId }}" class="tab-wrapper-paragraph__tab-link"
              href="#tab-content-{{ item['#paragraph'].id() }}" role="tab" aria-controls="{{ tabContentId }}">Tab 1
             <span class="d-inline-block d-md-none fa-solid fa-chevron-down fa-3xl"></span></a>
