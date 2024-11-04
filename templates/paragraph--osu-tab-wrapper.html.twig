@@ -15,7 +15,8 @@
         {% set tabContentId = 'tab-content-' ~ item['#paragraph'].id() %}
         <div class="tab-wrapper-paragraph__tabs">
           <a id="{{ tabLinkId }}" class="tab-wrapper-paragraph__tab-link"
-             href="#tab-content-{{ item['#paragraph'].id() }}" role="tab" aria-controls="{{ tabContentId }}">Tab 1</a>
+             href="#tab-content-{{ item['#paragraph'].id() }}" role="tab" aria-controls="{{ tabContentId }}">Tab 1
+            <span class="d-inline-block d-md-none fa-solid fa-chevron-down fa-3xl"></span></a>
           <div id="tab-content-{{ item['#paragraph'].id() }}" class="tab-wrapper-paragraph__tab-content"
                role="tabpanel" aria-labelledby="{{ tabLinkId }}">
             {{ item }}
