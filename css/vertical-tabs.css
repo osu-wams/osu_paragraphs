@@ -1,11 +1,15 @@
 /* phpcs:disable */
 .tab-wrapper-paragraph {
-  .tab-wrapper-paragraph__items {
+  .tab-wrapper-paragraph__tabs {
     background-color: hsl(0 100% 100%);
     display: grid;
     grid-template-columns: 1fr;
-
-    .tab-wrapper-paragraph__tabs {
+    @media screen and (min-width: 768px) {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .tab-wrapper-paragraph__tab {
       .tab-wrapper-paragraph__tab-link {
         align-items: center;
         border: 1px solid hsl(12 10.2% 90.39%);
@@ -23,6 +27,13 @@
         &:first-of-type {
           border-top: none;
         }
+        @media screen and (min-width: 768px) {
+          border: none;
+          left: 0;
+          padding: 1.25rem;
+          position: relative;
+          width: 260px;
+        }
       }
 
       .tab-wrapper-paragraph__tab-content {
@@ -31,6 +42,12 @@
         overflow: hidden;
         transition: opacity 500ms, visibility 500ms, max-height 500ms;
         visibility: hidden;
+        @media screen and (min-width: 768px) {
+          left: 320px;
+          position: absolute;
+          top: 0;
+          transition: opacity 500ms, visibility 500ms;
+        }
       }
 
     }
