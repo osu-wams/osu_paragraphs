@@ -42,6 +42,13 @@
         overflow: hidden;
         transition: opacity 500ms, visibility 500ms, max-height 500ms;
         visibility: hidden;
+        &.tab-wrapper-paragraph__tab-content--active {
+          max-height: 1000px;
+          opacity: 1;
+          overflow: auto;
+          padding: 0 1rem 2rem 1rem;
+          visibility: visible;
+        }
         @media screen and (min-width: 768px) {
           left: 320px;
           position: absolute;
