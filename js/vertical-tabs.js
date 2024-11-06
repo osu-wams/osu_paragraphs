@@ -15,6 +15,7 @@
           const $clickedTabLink = $(event.currentTarget);
           const targetSelector = $clickedTabLink.attr('href');
           const $targetContent = $(targetSelector);
+          const $parentTabs = $clickedTabLink.closest('.tab-wrapper-paragraph__tabs');
 
           // Get the height of all the tabs.
           const $allTabHeight = $('.tab-wrapper-paragraph__tab')
@@ -39,16 +40,13 @@
           $targetContent.css('max-height', $targetContent.prop('scrollHeight') + 'px');
           // Set the height of the osu-tabs container to the height of the controlledPanel if window width is greater than 769px
           if (window.innerWidth > 768) {
-            const container = document.querySelector(
-              '.tab-wrapper-paragraph__tabs',
-            );
             const $targetTabContentHeight = $targetContent.prop('scrollHeight');
             // Check to ensure
             // that the new height is not smaller than the total tab height.
             if ($allTabHeight > $targetTabContentHeight) {
-              container.style.height = $allTabHeight + 'px';
+              $parentTabs.css('height', $allTabHeight + 'px');
             } else {
-              container.style.height = $targetTabContentHeight + 'px';
+              $parentTabs.css('height', $targetTabContentHeight + 'px');
             }
           }
 
