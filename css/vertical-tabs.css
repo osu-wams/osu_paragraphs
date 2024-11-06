@@ -4,6 +4,7 @@
     background-color: hsl(0 100% 100%);
     display: grid;
     grid-template-columns: 1fr;
+    min-height: fit-content;
     @media screen and (min-width: 768px) {
       display: flex;
       flex-direction: column;
@@ -46,17 +47,16 @@
           max-height: 1000px;
           opacity: 1;
           overflow: auto;
-          padding: 0 1rem 2rem 1rem;
           visibility: visible;
         }
         @media screen and (min-width: 768px) {
           left: 320px;
           position: absolute;
           top: 0;
+          padding: 0 1rem 2rem 1rem;
           transition: opacity 500ms, visibility 500ms;
         }
       }
-
     }
   }
 }
