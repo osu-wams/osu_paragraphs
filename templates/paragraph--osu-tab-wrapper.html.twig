@@ -15,7 +15,8 @@
         {% set tabContentId = 'tab-content-' ~ item['#paragraph'].id() %}
         <div class="tab-wrapper-paragraph__tab">
           <a id="{{ tabLinkId }}" class="tab-wrapper-paragraph__tab-link"
-             href="#{{ tabContentId }}" role="tab" aria-controls="{{ tabContentId }}">Tab 1
+             href="#{{ tabContentId }}" role="tab"
+             aria-controls="{{ tabContentId }}">{{ item['#paragraph'].field_osu_tab_title.value }}
             <span class="d-inline-block d-md-none fa-solid fa-chevron-down fa-3xl"></span></a>
           <div id="{{ tabContentId }}" class="tab-wrapper-paragraph__tab-content"
                role="tabpanel" aria-hidden="true" aria-labelledby="{{ tabLinkId }}">
