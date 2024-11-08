@@ -20,6 +20,9 @@
         line-height: 130%;
         padding: 1rem;
         text-decoration: none;
+        span {
+          transition: transform 250ms;
+        }
         &:focus,
         &:hover,
         &:active {
@@ -30,8 +33,11 @@
         }
         &.tab-wrapper-paragraph__tab-link--active {
           outline: 2px solid hsl(15.7 92% 43.9%);
+          span.fa-chevron-down {
+            transform: rotate(-180deg);
+          }
         }
-        @media screen and (min-width: 768px) {
+        @media screen and (width > 768px) {
           border: none;
           left: 0;
           padding: 1.25rem;
@@ -53,7 +59,7 @@
           padding: 1rem 1rem 2rem 1rem;
           visibility: visible;
         }
-        @media screen and (min-width: 768px) {
+        @media screen and (width > 768px) {
           left: 260px;
           margin-left: -2px;
           padding: 1rem 1rem 2rem 1rem;
