@@ -31,7 +31,15 @@
           const $allActiveTabs = $tabWrapper.find('.tab-wrapper-paragraph__tab.active');
           const $allActiveTabLinks = $tabWrapper.find('.tab-wrapper-paragraph__tab-link--active');
           const $allActiveTabContents = $tabWrapper.find('.tab-wrapper-paragraph__tab-content--active');
-
+          if ($clickedTabLink.hasClass('tab-wrapper-paragraph__tab-link--active')) {
+            //@TODO if we are clicking the same target and we are less than 768 pixels wide we should close the target. Else we do normal flow.
+            if (window.innerWidth <= 768) {
+              $clickedTabLink.removeClass('tab-wrapper-paragraph__tab-link--active');
+              $clickedTabLink.parent().removeClass('active');
+              $targetContent.removeClass('tab-wrapper-paragraph__tab-content--active').css('max-height', '').attr('aria-hidden', 'true');
+              return;
+            }
+          }
           // Remove active classes and aria-hidden attributes
           $allActiveTabs.removeClass('active');
           $allActiveTabLinks.removeClass('tab-wrapper-paragraph__tab-link--active');
@@ -93,6 +101,31 @@
       handleHashChange();
       // If we load on the same page, run the script again.
       $(window).on('hashchange', handleHashChange);
+      $(window).on('resize', function () {
+        const width = window.innerWidth;
+        const $tabWrappers = $('div.paragraph.tab-wrapper-paragraph');
+
+        $tabWrappers.each(function () {
+          const $wrapper = $(this);
+          const $activeContent = $wrapper.find('.tab-wrapper-paragraph__tab-content--active');
+          const $parentTabs = $wrapper.find('.tab-wrapper-paragraph__tabs');
+
+          if (width > 768 && $activeContent.length) {
+            // Recalculate heights on resize for desktop
+            const $allTabHeight = $wrapper.find('.tab-wrapper-paragraph__tab')
+              .toArray()
+              .reduce((acc, tab) => Math.ceil($(tab).outerHeight(true)) + acc, 0);
+
+            const contentHeight = $activeContent.prop('scrollHeight');
+
+            $activeContent.css('max-height', contentHeight + 'px');
+            $parentTabs.css('height', Math.max($allTabHeight, contentHeight) + 'px');
+          } else if (width <= 768) {
+            // Reset fixed heights on mobile
+            $parentTabs.css('height', '');
+          }
+        });
+      });
 
     },
   };
