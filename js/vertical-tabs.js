@@ -12,6 +12,7 @@
          * Prevents the default action of the event, processes the tab click to show the
          * corresponding tab content, and updates the active states and ARIA attributes.
          *
+         * @function handleClick
          * @param {Event} event - The click event fired by the tab link.
          */
         const handleClick = (event) => {
@@ -24,15 +25,11 @@
           const $parentTabs = $clickedTabLink.closest('.tab-wrapper-paragraph__tabs');
 
           // Get the height of all the tabs.
-          const $allTabHeight = $('.tab-wrapper-paragraph__tab')
-            .toArray()
-            .reduce((accumulator, tab) => Math.ceil($(tab).outerHeight(true)) + accumulator, 0);
-
+          const $allTabHeight = calculateTabHeights($tabWrapper.find('.tab-wrapper-paragraph__tab'));
           const $allActiveTabs = $tabWrapper.find('.tab-wrapper-paragraph__tab.active');
           const $allActiveTabLinks = $tabWrapper.find('.tab-wrapper-paragraph__tab-link--active');
           const $allActiveTabContents = $tabWrapper.find('.tab-wrapper-paragraph__tab-content--active');
           if ($clickedTabLink.hasClass('tab-wrapper-paragraph__tab-link--active')) {
-            //@TODO if we are clicking the same target and we are less than 768 pixels wide we should close the target. Else we do normal flow.
             if (window.innerWidth <= 768) {
               $clickedTabLink.removeClass('tab-wrapper-paragraph__tab-link--active');
               $clickedTabLink.parent().removeClass('active');
@@ -70,12 +67,20 @@
         const $tabLinks = $(tabWrapperElement).find('a.tab-wrapper-paragraph__tab-link');
         $tabLinks.on('click', handleClick);
 
+        $tabLinks.on('keydown', function (e) {
+          // Enter (13) or Space key (32)
+          if (e.which === 13 || e.which === 32) {
+            e.preventDefault();
+            $(this).trigger('click');
+          }
+        });
+
       });
       /**
        * Handles changes in the URL hash and triggers click events based on the hash value.
        * Parses the hash and determines if it relates to a tab link or tab content,
        * then simulates a click event on the corresponding element.
-       *
+       * @function handleHashChange
        * @return {void}
        */
       const handleHashChange = () => {
@@ -91,17 +96,24 @@
           }
         }
       };
-      if (window.innerWidth > 768) {
-        // Find all first tabs and for each one click on it.
-        once('osu-paragraphs-vertical-tabs-first-tab', 'div.paragraph.tab-wrapper-paragraph', context).forEach((tabWrapperElement) => {
-          $(tabWrapperElement).find('a.tab-wrapper-paragraph__tab-link').first().trigger('click');
-        });
-      }
-      // If an anchor link is used, open the linked tab item.
-      handleHashChange();
-      // If we load on the same page, run the script again.
-      $(window).on('hashchange', handleHashChange);
-      $(window).on('resize', function () {
+      /**
+       * Adjusts the layout and styling of tab wrapper elements based on the current window width.
+       *
+       * This function handles window resize events to ensure proper height calculations
+       * for elements with the `tab-wrapper-paragraph` class. It dynamically adjusts
+       * the maximum height of active tab content and the height of parent tabs based on
+       * whether the viewport width is greater than 768 pixels (desktop) or 768 pixels or less (mobile).
+       *
+       * For desktop viewports (width > 768px), it recalculates and sets the maximum height for
+       * active tab content and adjusts the parent tabs height to accommodate all tabs within the container.
+       * For mobile viewports (width <= 768px), it resets any fixed height styles applied to the parent tabs.
+       *
+       * The function uses jQuery for DOM manipulation and works on `div` elements
+       * with the class `tab-wrapper-paragraph`.
+       * @function handleWindowResize
+       * @return {void}
+       */
+      const handleWindowResize = () => {
         const width = window.innerWidth;
         const $tabWrappers = $('div.paragraph.tab-wrapper-paragraph');
 
@@ -112,9 +124,7 @@
 
           if (width > 768 && $activeContent.length) {
             // Recalculate heights on resize for desktop
-            const $allTabHeight = $wrapper.find('.tab-wrapper-paragraph__tab')
-              .toArray()
-              .reduce((acc, tab) => Math.ceil($(tab).outerHeight(true)) + acc, 0);
+            const $allTabHeight = calculateTabHeights($wrapper.find('.tab-wrapper-paragraph__tab'));
 
             const contentHeight = $activeContent.prop('scrollHeight');
 
@@ -125,8 +135,34 @@
             $parentTabs.css('height', '');
           }
         });
-      });
+      };
+      /**
+       * Calculates the total height of the tab elements.
+       *
+       * @function calculateTabHeights
+       * @param {jQuery} $tabsCollection - A jQuery collection of tab elements whose heights are to be calculated.
+       * @returns {number} The total height of all elements in the collection, rounded up to the nearest integer.
+       */
+      const calculateTabHeights = ($tabsCollection) => {
+        let totalHeight = 0;
+        $tabsCollection.each(function () {
+          totalHeight += Math.ceil($(this).outerHeight(true));
+        });
+        return totalHeight;
+      };
 
+      if (window.innerWidth > 768) {
+        // Find all first tabs and for each one click on it.
+        once('osu-paragraphs-vertical-tabs-first-tab', 'div.paragraph.tab-wrapper-paragraph', context).forEach((tabWrapperElement) => {
+          $(tabWrapperElement).find('a.tab-wrapper-paragraph__tab-link').first().trigger('click');
+        });
+      }
+      // If an anchor link is used, open the linked tab item.
+      handleHashChange();
+      // If we load on the same page, run the script again.
+      $(window).on('hashchange', handleHashChange);
+      // If we resize the browser, ensure the opened tab is still open.
+      $(window).on('resize', handleWindowResize);
     },
   };
 })(jQuery, Drupal, once);
