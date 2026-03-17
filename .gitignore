@@ -1,2 +1,11 @@
-vendor
-/.idea/
+composer.lock
+/vendor
+
+# Ignore Apple Folder
+.DS_Store
+
+# Ignore IDE settings
+/.idea
+/.vim
+/.nvim.lua
+/.vscode
