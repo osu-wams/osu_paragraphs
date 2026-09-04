@@ -7,7 +7,7 @@
   not paragraph.isPublished() ? 'paragraph--unpublished'
 ] %}
 <div{{ attributes.addClass(classes) }}>
-  <h2>{{ content.field_osu_tab_wrapper_title }}</h2>
+  {{ content.field_osu_tab_wrapper_title }}
   <div class="tab-wrapper-paragraph__tabs">
     {% for key, item in content.field_osu_paragraph_item %}
       {% if key|first != '#' %}
